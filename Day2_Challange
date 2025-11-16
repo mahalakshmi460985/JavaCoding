@@ -1,96 +1,204 @@
-package Firstproject;
-import java.util.*;
-
-class Movie1 extends RuntimeException {
-	Movie1(String message){
-		super(message);
-	}
-
-}
-
-
-public class Movie2 {
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        try {
-            System.out.println("Welcome to Maha Theatre");
-            System.out.print("Do you want to Book or Refund: ");
-            String option = sc.nextLine();
-
-            if (!option.equals("book")) {
-                throw new Movie1("Only book option available now!");
-            }
-
-            System.out.println("Available Movies:");
-            System.out.println("Kandhara" + "\n" + "Dude" + "\n" + "Jananayagam");
-            System.out.print("Enter Movie Name: ");
-            String movie = sc.nextLine();
-
-            if (!(movie.equals("Kandhara") || movie.equals("Dude") || movie.equals("Jananayagam"))) {
-                throw new Movie1("Movie not found!");
-            }
-
-            System.out.println("Available Timings:");
-            System.out.println("1. 10:30 - 1:00");
-            System.out.println("2. 2:00 - 5:00");
-            System.out.println("3. 7:00 - 10:00");
-
-            System.out.print("Enter Time Number (1/2/3): ");
-            int time = sc.nextInt();
-
-            System.out.print("Enter number of seats: ");
-            int seats = sc.nextInt();
-
-            if (seats <= 0) {
-                throw new Movie1("Seat count must be greater than 0");
-            }
-
-            int pricePerSeat = 240;
-            int movietotal = seats * pricePerSeat;
-
-            sc.nextLine(); 
-            System.out.print("Do you want food (yes/no): ");
-            String foodOption = sc.nextLine();
-
-            int foodCost = 0;
-            if (foodOption.equals("yes")) {
-                System.out.println("Food Menu:");
-                System.out.println("1. Popcorn:150");
-                System.out.println("2. Juice:200");
-                System.out.println("3 Ice:100");
-                System.out.print("Choose food option (1/2/3): ");
-                int foodChoice = sc.nextInt();
-
-                if (foodChoice == 1) {
-                    foodCost = 150;
-                } else if (foodChoice == 2) {
-                    foodCost = 250;
-                } else if(foodChoice==3)
-                	foodCost=100;
-                else {
-                    throw new Movie1("Invalid food choice!");
-                }
-            }
-
-            int Total = movietotal + foodCost;
-
-            System.out.println("Booking Successful!");
-            System.out.println("Movie: " + movie);
-            System.out.println("Seats: " + seats);
-            System.out.println("Ticket Amount:" + movietotal);
-            if (foodCost > 0) {
-                System.out.println("Food Charges:" + foodCost);
-            }
-            System.out.println("Total Amount Payable:" + Total);
-
-        } catch (InputMismatchException e) {
-            System.out.println("Error: Please enter numbers only!");
-        } catch (Movie1 e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-    }
-}
+package Firstproject;                                                                                                                                                                  
+                                                                                                                                                                                       
+import java.util.*;                                                                                                                                                                    
+                                                                                                                                                                                       
+class Movie1 extends RuntimeException {                                                                                                                                                
+    Movie1(String message) {                                                                                                                                                           
+        super(message);                                                                                                                                                                
+    }                                                                                                                                                                                  
+}                                                                                                                                                                                      
+                                                                                                                                                                                       
+public class Movie2 {                                                                                                                                                                  
+                                                                                                                                                                                       
+    static String[] movies = {"Kandhara", "Dude", "Jananayagam"};                                                                                                                      
+    static int[] seatPrice = {240, 240, 240};                                                                                                                                          
+                                                                                                                                                                                       
+    static String[] timings = {"10:30 - 1:00", "2:00 - 5:00", "7:00 - 10:00"};                                                                                                         
+    static String[] foodNames = {"Popcorn", "Juice", "Ice"};                                                                                                                           
+    static int[] foodPrices = {150, 250, 100};                                                                                                                                         
+                                                                                                                                                                                       
+    static Scanner sc = new Scanner(System.in);                                                                                                                                        
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static String selectMovie() {                                                                                                                                               
+                                                                                                                                                                                       
+        System.out.println("Available Movies:");                                                                                                                                       
+        for (int i = 0; i < movies.length; i++) {                                                                                                                                      
+            System.out.println((i + 1) + ". " + movies[i]);                                                                                                                            
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.print("Enter Movie Number(eg:1,2,3): ");                                                                                                                            
+        int m = sc.nextInt();                                                                                                                                                          
+                                                                                                                                                                                       
+        if (m < 1 || m > movies.length) {                                                                                                                                              
+            throw new Movie1("Movie not found!");                                                                                                                                      
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        return movies[m - 1];                                                                                                                                                          
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static String selectTiming() {                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.println("Available Timings:");                                                                                                                                      
+        for (int i = 0; i < timings.length; i++) {                                                                                                                                     
+            System.out.println((i + 1) + ". " + timings[i]);                                                                                                                           
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.print("Enter Time Number (1/2/3): ");                                                                                                                               
+        int t = sc.nextInt();                                                                                                                                                          
+                                                                                                                                                                                       
+        if (t < 1 || t > timings.length) {                                                                                                                                             
+            throw new Movie1("Invalid timing selection!");                                                                                                                             
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        return timings[t - 1];                                                                                                                                                         
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static int selectSeats() {                                                                                                                                                  
+                                                                                                                                                                                       
+        System.out.print("Enter number of seats: ");                                                                                                                                   
+        int seats = sc.nextInt();                                                                                                                                                      
+                                                                                                                                                                                       
+        if (seats <= 0) {                                                                                                                                                              
+            throw new Movie1("Seat count must be greater than 0");                                                                                                                     
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        return seats;                                                                                                                                                                  
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static int orderFood() {                                                                                                                                                    
+                                                                                                                                                                                       
+        System.out.print("Do you want food (yes/no): ");                                                                                                                               
+        sc.nextLine();                                                                                                                                                                 
+        String choice = sc.nextLine();                                                                                                                                                 
+                                                                                                                                                                                       
+        if (!choice.equalsIgnoreCase("yes")) return 0;                                                                                                                                 
+                                                                                                                                                                                       
+        System.out.println("Food Menu:");                                                                                                                                              
+        for (int i = 0; i < foodNames.length; i++) {                                                                                                                                   
+            System.out.println((i + 1) + ". " + foodNames[i] + " : " + foodPrices[i]);                                                                                                 
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.print("Choose food option (1/2/3): ");                                                                                                                              
+        int f = sc.nextInt();                                                                                                                                                          
+                                                                                                                                                                                       
+        if (f < 1 || f > foodNames.length) {                                                                                                                                           
+            throw new Movie1("Invalid food choice!");                                                                                                                                  
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        return foodPrices[f - 1];                                                                                                                                                      
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static void payment(int amount) {                                                                                                                                           
+                                                                                                                                                                                       
+        System.out.println("Select Payment Method:");                                                                                                                                  
+        System.out.println("1. UPI");                                                                                                                                                  
+        System.out.println("2. Card");                                                                                                                                                 
+        System.out.println("3. Cash");                                                                                                                                                 
+                                                                                                                                                                                       
+        System.out.print("Enter option: ");                                                                                                                                            
+        int opt = sc.nextInt();                                                                                                                                                        
+                                                                                                                                                                                       
+        if (opt == 1) {                                                                                                                                                                
+            System.out.println("Paying via UPI...");                                                                                                                                   
+        } else if (opt == 2) {                                                                                                                                                         
+            System.out.println("Paying via Card...");                                                                                                                                  
+        } else if (opt == 3) {                                                                                                                                                         
+            System.out.println("Cash Payment Selected...");                                                                                                                            
+        } else {                                                                                                                                                                       
+            throw new Movie1("Invalid payment option!");                                                                                                                               
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.println("Payment Successful! Amount Paid: " + amount);                                                                                                              
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static void refund() {                                                                                                                                                      
+                                                                                                                                                                                       
+        sc.nextLine();                                                                                                                                                                 
+                                                                                                                                                                                       
+        System.out.println("--- Refund Section ---");                                                                                                                                  
+        System.out.print("Enter Movie Name: ");                                                                                                                                        
+        String movie = sc.nextLine();                                                                                                                                                  
+                                                                                                                                                                                       
+        int index = -1;                                                                                                                                                                
+        for (int i = 0; i < movies.length; i++) {                                                                                                                                      
+            if (movie.equalsIgnoreCase(movies[i])) {                                                                                                                                   
+                index = i;                                                                                                                                                             
+            }                                                                                                                                                                          
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        if (index == -1) {                                                                                                                                                             
+            throw new Movie1("Refund Failed! Movie not found.");                                                                                                                       
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.print("Enter number of seats to refund: ");                                                                                                                         
+        int seats = sc.nextInt();                                                                                                                                                      
+                                                                                                                                                                                       
+        if (seats <= 0) {                                                                                                                                                              
+            throw new Movie1("Seat count must be greater than 0!");                                                                                                                    
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        int refundAmount = seats * seatPrice[index];                                                                                                                                   
+                                                                                                                                                                                       
+        System.out.println("Refund Successful!");                                                                                                                                      
+        System.out.println("Movie: " + movie);                                                                                                                                         
+        System.out.println("Seats Refunded: " + seats);                                                                                                                                
+        System.out.println("Refund Amount: " + refundAmount);                                                                                                                          
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static void booking() {                                                                                                                                                     
+                                                                                                                                                                                       
+        String movie = selectMovie();                                                                                                                                                  
+        String time = selectTiming();                                                                                                                                                  
+        int seats = selectSeats();                                                                                                                                                     
+        int foodCost = orderFood();                                                                                                                                                    
+                                                                                                                                                                                       
+        int ticketAmount = seats * 240;                                                                                                                                                
+        int total = ticketAmount + foodCost;                                                                                                                                           
+                                                                                                                                                                                       
+        System.out.println("----- BOOKING DETAILS -----");                                                                                                                             
+        System.out.println("Movie: " + movie);                                                                                                                                         
+        System.out.println("Timing: " + time);                                                                                                                                         
+        System.out.println("Seats: " + seats);                                                                                                                                         
+        System.out.println("Ticket Price: " + ticketAmount);                                                                                                                           
+                                                                                                                                                                                       
+        if (foodCost > 0) {                                                                                                                                                            
+            System.out.println("Food Charges: " + foodCost);                                                                                                                           
+        }                                                                                                                                                                              
+                                                                                                                                                                                       
+        System.out.println("Total Amount: " + total);                                                                                                                                  
+                                                                                                                                                                                       
+        payment(total);                                                                                                                                                                
+    }                                                                                                                                                                                  
+                                                                                                                                                                                       
+                                                                                                                                                                                       
+    public static void main(String[] args) {                                                                                                                                           
+                                                                                                                                                                                       
+        try {                                                                                                                                                                          
+            System.out.println("Welcome to Maha Theatre ");                                                                                                                            
+            System.out.print("Do you want to Book or Refund: ");                                                                                                                       
+                                                                                                                                                                                       
+            String option = sc.nextLine();                                                                                                                                             
+                                                                                                                                                                                       
+            if (option.equalsIgnoreCase("book")) {                                                                                                                                     
+                booking();                                                                                                                                                             
+            } else if (option.equalsIgnoreCase("refund")) {                                                                                                                            
+                refund();                                                                                                                                                              
+            } else {                                                                                                                                                                   
+                throw new Movie1("Invalid Option! Only Book or Refund available.");                                                                                                    
+            }                                                                                                                                                                          
+                                                                                                                                                                                       
+        } catch (Movie1 e) {                                                                                                                                                           
+            System.out.println("Error: " + e.getMessage());                                                                                                                            
+        } catch (InputMismatchException e) {                                                                                                                                           
+            System.out.println("Error: Enter valid numbers!");                                                                                                                         
+        }                                                                                                                                                                              
+    }                                                                                                                                                                                  
+}                                                                                                                                                                                      
+                                                                                                                                                                                       
