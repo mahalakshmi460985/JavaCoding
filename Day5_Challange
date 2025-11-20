@@ -1,0 +1,134 @@
+package Daycodes;
+
+import java.util.*;
+
+public class Day10_Coding {
+
+    class Employee {
+        int id;
+        String name;
+        double salary;
+
+        Employee(int id, String name, double salary) {
+            this.id = id;
+            this.name = name;
+            this.salary = salary;
+        }
+
+        void display() {
+            System.out.println("ID: " + id);
+            System.out.println("Name: " + name);
+            System.out.println("Salary: " + salary);
+            System.out.println("-------------------------");
+        }
+    }
+
+    class EmployeeManagement {
+        Employee[] employees = new Employee[50];
+        int count = 0;
+
+        void addEmployee(int id, String name, double salary) {
+            employees[count] = new Employee(id, name, salary);
+            count++;
+            System.out.println("Employee Added Successfully!\n");
+        }
+
+        void displayAll() {
+            if (count == 0) {
+                System.out.println("No Employees Available!\n");
+                return;
+            }
+            System.out.println("---- Employee List ----");
+            for (int i = 0; i < count; i++) {
+                employees[i].display();
+            }
+        }
+
+        Employee searchById(int id) {
+            for (int i = 0; i < count; i++) {
+                if (employees[i].id == id) {
+                    return employees[i];
+                }
+            }
+            return null;
+        }
+
+        void updateSalary(int id, double newSalary) {
+            Employee e = searchById(id);
+            if (e == null) {
+                System.out.println("Employee Not Found!\n");
+            } else {
+                e.salary = newSalary;
+                System.out.println("Salary Updated Successfully!\n");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        Day10_Coding outer = new Day10_Coding();
+        EmployeeManagement em = outer.new EmployeeManagement();
+
+        int choice;
+
+        while (true) {
+            System.out.println("---- Employee Management Menu ----");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Display All Employees");
+            System.out.println("3. Search Employee by ID");
+            System.out.println("4. Update Salary");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Salary: ");
+                    double salary = sc.nextDouble();
+
+                    em.addEmployee(id, name, salary);
+                    break;
+
+                case 2:
+                    em.displayAll();
+                    break;
+
+                case 3:
+                    System.out.print("Enter ID to Search: ");
+                    int sid = sc.nextInt();
+                    Employee e = em.searchById(sid);
+
+                    if (e != null) {
+                        System.out.println("Employee Found:");
+                        e.display();
+                    } else {
+                        System.out.println("Employee Not Found!\n");
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("Enter ID for Salary Update: ");
+                    int uid = sc.nextInt();
+                    System.out.print("Enter New Salary: ");
+                    double ns = sc.nextDouble();
+                    em.updateSalary(uid, ns);
+                    break;
+
+                case 5:
+                    System.out.println("Exiting Program...");
+                    return;
+
+                default:
+                    System.out.println("Invalid Choice!\n");
+            }
+        }
+    }
+}
