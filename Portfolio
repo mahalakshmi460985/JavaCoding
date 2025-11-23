@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multi-Language Coding Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 15px;
+    }
+    select, button {
+      padding: 10px 15px;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    .option {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #eee;
+    }
+    .option:hover {
+      background-color: #ddd;
+    }
+    .correct { color: green; }
+    .wrong { color: red; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Multi-Language Coding Quiz</h2>
+
+    <div id="startScreen">
+      <label for="language">Select Language:</label>
+      <select id="language">
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="js">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="python">Python</option>
+      </select><br />
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="quizScreen" class="hidden">
+      <p id="questionText"></p>
+      <div id="options"></div>
+      <p id="feedback"></p>
+      <p id="explanation"></p>
+      <button id="nextBtn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div id="resultScreen" class="hidden">
+      <h3>Your Score: <span id="score"></span>/15</h3>
+      <button onclick="location.reload()">Restart</button>
+    </div>
+  </div>
+
+<script>
+  const allQuestions = {
+    html: [
+      {
+        question: "What does HTML stand for?",
+        options: ["HyperText Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyperlinking Text Markup Language"],
+        answer: "HyperText Markup Language",
+        explanation: "HTML stands for HyperText Markup Language."
+      },
+      {
+        question: "Which tag is used to create a hyperlink in HTML?",
+        options: ["<a>", "<link>", "<href>", "<hyperlink>"],
+        answer: "<a>",
+        explanation: "The <a> tag defines a hyperlink, which is used to link from one page to another."
+      },
+      {
+        question: "What is the correct HTML element for inserting a line break?",
+        options: ["<break>", "<br>", "<lb>", "<line>"],
+        answer: "<br>",
+        explanation: "The <br> tag inserts a single line break."
+      },
+      {
+        question: "Which attribute is used to specify the URL of a link?",
+        options: ["href", "src", "link", "url"],
+        answer: "href",
+        explanation: "The href attribute specifies the URL of the link."
+      },
+      {
+        question: "What does the <img> tag do?",
+        options: ["Defines a hyperlink", "Embeds an image", "Creates a paragraph", "Adds a table"],
+        answer: "Embeds an image",
+        explanation: "The <img> tag is used to embed an image in an HTML page."
+      },
+      {
+        question: "Which tag is used to define a paragraph?",
+        options: ["<p>", "<para>", "<pg>", "<paragraph>"],
+        answer: "<p>",
+        explanation: "The <p> tag defines a paragraph."
+      },
+      {
+        question: "Which tag is used to define an unordered list?",
+        options: ["<ul>", "<ol>", "<li>", "<list>"],
+        answer: "<ul>",
+        explanation: "The <ul> tag defines an unordered list."
+      },
+      {
+        question: "Which tag is used to define a table row?",
+        options: ["<table>", "<tr>", "<td>", "<th>"],
+        answer: "<tr>",
+        explanation: "The <tr> tag defines a row in a table."
+      },
+      {
+        question: "What is the correct HTML element for the largest heading?",
+        options: ["<h1>", "<heading>", "<head>", "<h6>"],
+        answer: "<h1>",
+        explanation: "The <h1> tag defines the largest heading."
+      },
+      {
+        question: "Which tag is used to define a table cell?",
+        options: ["<td>", "<th>", "<tr>", "<table>"],
+        answer: "<td>",
+        explanation: "The <td> tag defines a cell in a table."
+      },
+      {
+        question: "How do you add a comment in HTML?",
+        options: ["// This is a comment", "<!-- This is a comment -->", "# This is a comment", "/* This is a comment */"],
+        answer: "<!-- This is a comment -->",
+        explanation: "Comments in HTML are added using <!-- comment -->."
+      },
+      {
+        question: "Which HTML element is used to specify a footer for a document or section?",
+        options: ["<footer>", "<bottom>", "<section>", "<aside>"],
+        answer: "<footer>",
+        explanation: "The <footer> element defines a footer for a document or section."
+      },
+      {
+        question: "Which attribute is used to open a link in a new tab?",
+        options: ["target='_blank'", "href='_new'", "rel='new'", "open='new'"],
+        answer: "target='_blank'",
+        explanation: "The target='_blank' attribute opens the linked document in a new tab or window."
+      },
+      {
+        question: "Which tag is used to embed a video in HTML5?",
+        options: ["<video>", "<media>", "<movie>", "<film>"],
+        answer: "<video>",
+        explanation: "The <video> tag is used to embed video content."
+      },
+      {
+        question: "What is the correct HTML element to define important text?",
+        options: ["<important>", "<strong>", "<b>", "<i>"],
+        answer: "<strong>",
+        explanation: "The <strong> element defines important text."
+      }
+    ],
+      css: [
+  {
+    question: "What does CSS stand for?",
+    options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"],
+    answer: "Cascading Style Sheets",
+    explanation: "CSS stands for Cascading Style Sheets."
+  },
+  {
+    question: "Which HTML tag is used to link an external CSS file?",
+    options: ["<style>", "<css>", "<link>", "<script>"],
+    answer: "<link>",
+    explanation: "The <link> tag links an external CSS file."
+  },
+  {
+    question: "Which property is used to change the background color?",
+    options: ["color", "background-color", "bgcolor", "background"],
+    answer: "background-color",
+    explanation: "The 'background-color' property changes the background color."
+  },
+  {
+    question: "How do you make the text bold in CSS?",
+    options: ["font-weight: bold;", "font-style: bold;", "text-decoration: bold;", "text-weight: bold;"],
+    answer: "font-weight: bold;",
+    explanation: "The 'font-weight' property with value 'bold' makes text bold."
+  },
+  {
+    question: "Which property controls the text size?",
+    options: ["text-style", "font-size", "text-size", "font-style"],
+    answer: "font-size",
+    explanation: "The 'font-size' property controls the size of the text."
+  },
+  {
+    question: "What is the correct CSS syntax to select all <p> elements?",
+    options: ["p {}", ".p {}", "#p {}", "*p {}"],
+    answer: "p {}",
+    explanation: "To select all <p> elements, use 'p {}'."
+  },
+  {
+    question: "How do you add a comment in CSS?",
+    options: ["// this is a comment", "/* this is a comment */", "# this is a comment", "<!-- this is a comment -->"],
+    answer: "/* this is a comment */",
+    explanation: "Comments in CSS are added using /* comment */."
+  },
+  {
+    question: "Which property is used to change the text color?",
+    options: ["fgcolor", "color", "text-color", "font-color"],
+    answer: "color",
+    explanation: "The 'color' property changes the text color."
+  },
+  {
+    question: "How do you make a list not show bullets?",
+    options: ["list-style: none;", "list-type: none;", "bullet: none;", "list: none;"],
+    answer: "list-style: none;",
+    explanation: "The 'list-style: none;' removes bullets from a list."
+  },
+  {
+    question: "Which property is used to change the font of an element?",
+    options: ["font-family", "font-style", "text-style", "font-weight"],
+    answer: "font-family",
+    explanation: "The 'font-family' property sets the font of an element."
+  },
+  {
+    question: "How do you select an element with id 'header'?",
+    options: ["#header", ".header", "header", "*header"],
+    answer: "#header",
+    explanation: "Use '#' followed by id to select an element with that id."
+  },
+  {
+    question: "Which property is used for spacing between lines of text?",
+    options: ["line-height", "letter-spacing", "text-spacing", "word-spacing"],
+    answer: "line-height",
+    explanation: "The 'line-height' property sets the space between lines."
+  },
+  {
+    question: "What does 'float: left;' do?",
+    options: ["Moves element to left", "Moves element to right", "Centers the element", "Deletes the element"],
+    answer: "Moves element to left",
+    explanation: "'float: left;' moves the element to the left side."
+  },
+  {
+    question: "Which property adds space inside the border of an element?",
+    options: ["margin", "padding", "border-spacing", "spacing"],
+    answer: "padding",
+    explanation: "'padding' adds space inside the border."
+  },
+  {
+    question: "How do you make text italic in CSS?",
+    options: ["font-style: italic;", "text-decoration: italic;", "font-weight: italic;", "text-style: italic;"],
+    answer: "font-style: italic;",
+    explanation: "'font-style: italic;' makes text italic."
+  }
+    ],
+    js: [
+  {
+    question: "Which company developed JavaScript?",
+    options: ["Netscape", "Microsoft", "Sun Microsystems", "Oracle"],
+    answer: "Netscape",
+    explanation: "JavaScript was developed by Netscape."
+  },
+  {
+    question: "Which symbol is used for comments in JavaScript?",
+    options: ["//", "/* */", "#", "<!-- -->"],
+    answer: "//",
+    explanation: "Single-line comments in JavaScript use //."
+  },
+  {
+    question: "How do you declare a variable in JavaScript?",
+    options: ["var", "int", "let", "Both var and let"],
+    answer: "Both var and let",
+    explanation: "'var' and 'let' are used to declare variables."
+  },
+  {
+    question: "Which method converts JSON to a JavaScript object?",
+    options: ["JSON.parse()", "JSON.stringify()", "JSON.convert()", "JSON.toObject()"],
+    answer: "JSON.parse()",
+    explanation: "JSON.parse() parses JSON string into an object."
+  },
+  {
+    question: "Which event occurs when the user clicks on an element?",
+    options: ["onclick", "onchange", "onmouseover", "onmouseclick"],
+    answer: "onclick",
+    explanation: "The 'onclick' event fires when an element is clicked."
+  },
+  {
+    question: "Which of the following is NOT a JavaScript data type?",
+    options: ["Number", "String", "Boolean", "Character"],
+    answer: "Character",
+    explanation: "JavaScript does not have a 'Character' data type."
+  },
+  {
+    question: "What is the output of 'typeof null' in JavaScript?",
+    options: ["null", "object", "undefined", "boolean"],
+    answer: "object",
+    explanation: "Due to legacy reasons, 'typeof null' returns 'object'."
+  },
+  {
+    question: "How do you write a function in JavaScript?",
+    options: ["function myFunction() {}", "def myFunction() {}", "func myFunction() {}", "function:myFunction() {}"],
+    answer: "function myFunction() {}",
+    explanation: "Functions are declared using the 'function' keyword."
+  },
+  {
+    question: "Which method adds an element at the end of an array?",
+    options: ["push()", "pop()", "shift()", "unshift()"],
+    answer: "push()",
+    explanation: "push() adds elements to the end of an array."
+  },
+  {
+    question: "Which operator is used to assign a value?",
+    options: ["=", "==", "===", "!="],
+    answer: "=",
+    explanation: "'=' is the assignment operator."
+  },
+  {
+    question: "Which keyword is used to create a constant in JavaScript?",
+    options: ["const", "let", "var", "constant"],
+    answer: "const",
+    explanation: "'const' declares a read-only named constant."
+  },
+  {
+    question: "What will 'console.log(2 + '2')' output?",
+    options: ["4", "22", "NaN", "TypeError"],
+    answer: "22",
+    explanation: "Number 2 is converted to string and concatenated."
+  },
+  {
+    question: "Which function is used to display a message in a popup box?",
+    options: ["alert()", "prompt()", "confirm()", "message()"],
+    answer: "alert()",
+    explanation: "alert() displays a popup alert box."
+  },
+  {
+    question: "How do you create an array in JavaScript?",
+    options: ["var arr = [];", "var arr = ();", "var arr = {};", "var arr = '';"],
+    answer: "var arr = [];",
+    explanation: "Square brackets [] create an array."
+  },
+  {
+    question: "What does '=== ' operator check?",
+    options: ["Equality with type check", "Only equality", "Assignment", "Inequality"],
+    answer: "Equality with type check",
+    explanation: "'===' checks equality with strict type comparison."
+  }
+],
+    java: [
+  {
+    question: "Which keyword is used to inherit a class in Java?",
+    options: ["this", "super", "extends", "implements"],
+    answer: "extends",
+    explanation: "The 'extends' keyword is used for inheritance in Java."
+  },
+  {
+    question: "What is the size of an int data type in Java?",
+    options: ["4 bytes", "2 bytes", "8 bytes", "1 byte"],
+    answer: "4 bytes",
+    explanation: "An int is 4 bytes in Java."
+  },
+  {
+    question: "Which method is the entry point of a Java program?",
+    options: ["main()", "start()", "run()", "init()"],
+    answer: "main()",
+    explanation: "The 'main()' method is the entry point."
+  },
+  {
+    question: "Which keyword is used to define a constant in Java?",
+    options: ["final", "const", "static", "immutable"],
+    answer: "final",
+    explanation: "The 'final' keyword makes a variable constant."
+  },
+  {
+    question: "Which of these is NOT a Java access modifier?",
+    options: ["private", "protected", "public", "friendly"],
+    answer: "friendly",
+    explanation: "'friendly' is not a Java access modifier."
+  },
+  {
+    question: "What is the superclass of all classes in Java?",
+    options: ["Object", "Class", "Main", "Super"],
+    answer: "Object",
+    explanation: "All classes inherit from Object class."
+  },
+  {
+    question: "Which operator is used to compare two values?",
+    options: ["==", "=", "!=", "+"],
+    answer: "==",
+    explanation: "'==' compares values in Java."
+  },
+  {
+    question: "Which method is used to print output in Java?",
+    options: ["System.out.println()", "print()", "console.log()", "echo()"],
+    answer: "System.out.println()",
+    explanation: "System.out.println() prints output to console."
+  },
+  {
+    question: "Which keyword is used to create a new object?",
+    options: ["new", "create", "make", "object"],
+    answer: "new",
+    explanation: "'new' creates new objects."
+  },
+  {
+    question: "What is the default value of a boolean variable?",
+    options: ["false", "true", "null", "0"],
+    answer: "false",
+    explanation: "The default boolean value is false."
+  },
+  {
+    question: "Which exception is thrown when a number is divided by zero?",
+    options: ["ArithmeticException", "NullPointerException", "IOException", "NumberFormatException"],
+    answer: "ArithmeticException",
+    explanation: "Dividing by zero throws ArithmeticException."
+  },
+  {
+    question: "How do you declare an array in Java?",
+    options: ["int[] arr;", "array arr;", "int arr();", "arr[] int;"],
+    answer: "int[] arr;",
+    explanation: "int[] arr; declares an integer array."
+  },
+  {
+    question: "Which keyword is used to implement an interface?",
+    options: ["implements", "extends", "inherits", "uses"],
+    answer: "implements",
+    explanation: "'implements' keyword is used to implement an interface."
+  },
+  {
+    question: "What does 'static' mean in Java?",
+    options: ["Belongs to class", "Belongs to object", "Temporary", "Final"],
+    answer: "Belongs to class",
+    explanation: "'static' means the member belongs to the class."
+  },
+  {
+    question: "Which data type is used to store text in Java?",
+    options: ["String", "char", "int", "boolean"],
+    answer: "String",
+    explanation: "String is used to store text."
+  }
+],
+    python: [
+  {
+    question: "What symbol is used to comment a single line in Python?",
+    options: ["//", "<!-- -->", "#", "/* */"],
+    answer: "#",
+    explanation: "In Python, single-line comments begin with a # symbol."
+  },
+  {
+    question: "Which function is used to output to the screen in Python?",
+    options: ["print()", "echo()", "console.log()", "write()"],
+    answer: "print()",
+    explanation: "print() outputs text to the screen."
+  },
+  {
+    question: "How do you declare a variable in Python?",
+    options: ["var x = 5", "x = 5", "int x = 5", "declare x = 5"],
+    answer: "x = 5",
+    explanation: "Variables are declared by assignment in Python."
+  },
+  {
+    question: "Which data type is used to store decimal numbers?",
+    options: ["int", "float", "str", "bool"],
+    answer: "float",
+    explanation: "float stores decimal numbers."
+  },
+  {
+    question: "How do you start a function in Python?",
+    options: ["function myFunc():", "def myFunc():", "func myFunc():", "define myFunc():"],
+    answer: "def myFunc():",
+    explanation: "Functions start with def keyword."
+  },
+  {
+    question: "Which keyword is used for loops in Python?",
+    options: ["for", "loop", "while", "repeat"],
+    answer: "for",
+    explanation: "The 'for' keyword is used for loops."
+  },
+  {
+    question: "Which method adds an item to the end of a list?",
+    options: ["append()", "add()", "insert()", "extend()"],
+    answer: "append()",
+    explanation: "append() adds an item to the end of the list."
+  },
+  {
+    question: "How do you import a module in Python?",
+    options: ["import module", "include module", "using module", "require module"],
+    answer: "import module",
+    explanation: "Modules are imported using import keyword."
+  },
+  {
+    question: "Which symbol is used for exponentiation?",
+    options: ["^", "", "exp()", "pow()"],
+    answer: "",
+    explanation: "'' is used for exponentiation."
+  },
+  {
+    question: "What is the output of 'print(type(3))'?",
+    options: ["int", "<class 'int'>", "number", "integer"],
+    answer: "<class 'int'>",
+    explanation: "print(type(3)) outputs the type as <class 'int'>."
+  },
+  {
+    question: "Which keyword is used for conditional statements?",
+    options: ["if", "when", "cond", "case"],
+    answer: "if",
+    explanation: "'if' is used for conditionals."
+  },
+  {
+    question: "How do you create a list in Python?",
+    options: ["[]", "{}", "()", "<>"],
+    answer: "[]",
+    explanation: "Square brackets create a list."
+  },
+  {
+    question: "Which keyword exits a loop in Python?",
+    options: ["break", "exit", "stop", "return"],
+    answer: "break",
+    explanation: "'break' exits the loop."
+  },
+  {
+    question: "How do you write a multi-line comment in Python?",
+    options: ["''' comment '''", "// comment //", "<!-- comment -->", "/* comment */"],
+    answer: "''' comment '''",
+    explanation: "Triple quotes are used for multi-line comments."
+  },
+  {
+    question: "What does 'len()' do in Python?",
+    options: ["Returns length", "Returns type", "Returns value", "Returns size"],
+    answer: "Returns length",
+    explanation: "len() returns the length of an object."
+  }
+],
+  };
+
+  let questions = [], current = 0, score = 0;
+
+  function startQuiz() {
+    const lang = document.getElementById("language").value;
+    questions = allQuestions[lang];
+    if (!questions || questions.length === 0) return alert("No questions found for this language");
+    current = 0;
+    score = 0;
+    document.getElementById("startScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.remove("hidden");
+    showQuestion();
+  }
+
+  function showQuestion() {
+    if (!questions[current]) return;
+    const q = questions[current];
+    document.getElementById("questionText").textContent = q.question;
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("explanation").textContent = "";
+
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.className = "option";
+      btn.onclick = () => checkAnswer(opt, btn);
+      optionsDiv.appendChild(btn);
+    });
+
+    // Hide next button initially (enable after answering)
+    document.getElementById("nextBtn").style.display = "none";
+  }
+
+  function checkAnswer(selected, btn) {
+    const q = questions[current];
+    const feedback = document.getElementById("feedback");
+    const explanation = document.getElementById("explanation");
+
+    // Disable all options after answer selected
+    const optionButtons = document.querySelectorAll(".option");
+    optionButtons.forEach(b => b.disabled = true);
+
+    if (selected === q.answer) {
+      feedback.textContent = "✅ Correct!";
+      feedback.className = "correct";
+      score++;
+      btn.style.backgroundColor = "#c8e6c9"; // Light green for correct answer
+    } else {
+      feedback.textContent = "❌ Wrong!";
+      feedback.className = "wrong";
+      btn.style.backgroundColor = "#ffcdd2"; // Light red for wrong answer
+
+      // Highlight correct answer button in green
+      optionButtons.forEach(b => {
+        if (b.textContent === q.answer) b.style.backgroundColor = "#c8e6c9";
+      });
+    }
+    explanation.textContent = "Explanation: " + q.explanation;
+
+    // Show next button after answering
+    document.getElementById("nextBtn").style.display = "inline-block";
+  }
+
+  function nextQuestion() {
+    current++;
+    if (current < questions.length) {
+      showQuestion();
+    } else {
+      document.getElementById("quizScreen").classList.add("hidden");
+      document.getElementById("resultScreen").classList.remove("hidden");
+      document.getElementById("score").textContent = score;
+    }
+  }
+</script>
+</body>
+</html>
+body {
+  font-family: Arial;
+  background: #f8f9fa;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background: royalblue;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: navy;
+}
+
+.option {
+  margin: 10px 0;
+  padding: 10px;
+  background: #eee;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.option.correct {
+  background: #c8e6c9;
+}
+
+.option.wrong {
+  background: #ffcdd2;
+}
+let currentQuestion = 0;
+let score = 0;
+let selectedLanguage = "";
+let quizData = [];
+
+document.getElementById("start-btn").onclick = () => {
+  selectedLanguage = document.getElementById("language").value;
+  quizData = questions[selectedLanguage];
+  currentQuestion = 0;
+  score = 0;
+
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("quiz-container").style.display = "block";
+  loadQuestion();
+};
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+  document.getElementById("question").innerText = Q${currentQuestion + 1}. ${q.question};
+  
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("div");
+    btn.classList.add("option");
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(i, q.answer, q.explanation);
+    optionsDiv.appendChild(btn);
+  });
+
+  document.getElementById("explanation").innerText = "";
+  document.getElementById("next-btn").style.display = "none";
+}
+
+function checkAnswer(selected, correct, explanation) {
+  const optionEls = document.querySelectorAll(".option");
+  optionEls.forEach((opt, idx) => {
+    if (idx === correct) opt.classList.add("correct");
+    if (idx === selected && selected !== correct) opt.classList.add("wrong");
+    opt.onclick = null;
+  });
+
+  if (selected === correct) score++;
+  document.getElementById("explanation").innerText = explanation;
+  document.getElementById("next-btn").style.display = "inline-block";
+}
+
+document.getElementById("next-btn").onclick = () => {
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+};
+
+function showResult() {
+  document.getElementById("quiz-container").style.display = "none";
+  document.getElementById("result-container").style.display = "block";
+  document.getElementById("score").innerText = score;
+}
+const questions = {
+  html: [
+    {
+      question: "What does HTML stand for?",
+      options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+      answer: 0,
+      explanation: "HTML stands for Hyper Text Markup Language, used to structure web pages."
+    },
+    {
+      question: "Which tag is used to create a hyperlink in HTML?",
+      options: ["<link>", "<a>", "<href>"],
+      answer: 1,
+      explanation: "The <a> tag is used to define hyperlinks in HTML."
+    },
+    // Add more HTML questions (15 total)
+  ],
+  css: [
+    {
+      question: "What does CSS stand for?",
+      options: ["Cascading Style Sheets", "Creative Style System", "Computer Style Sheets"],
+      answer: 0,
+      explanation: "CSS means Cascading Style Sheets, used for styling web pages."
+    },
+    {
+      question: "Which property is used to change text color?",
+      options: ["font-color", "text-color", "color"],
+      answer: 2,
+      explanation: "The 'color' property changes the text color."
+    },
+    // Add more CSS questions (15 total)
+  ],
+  javascript: [
+    // Add 15 JavaScript questions here
+  ],
+  java: [
+    // Add 15 Java questions here
+  ],
+  python: [
+    // Add 15 Python questions here
+  ]
+};
